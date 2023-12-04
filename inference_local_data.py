@@ -28,10 +28,13 @@ transform = transforms.Compose([
 
 
 def predict_image(image_path):
-    image = Image.open(image_path).convert('RGB')
-    # Add batch dimension
-    image = transform(image).unsqueeze(0) 
-
+    try:
+        image = Image.open(image_path).convert('RGB')
+        # Add batch dimension
+        image = transform(image).unsqueeze(0) 
+    except Exception as e:
+        print(e)
+        return 0
     with torch.no_grad():
         outputs = model(image)
     return torch.argmax(outputs, dim=1)
