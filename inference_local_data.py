@@ -5,8 +5,16 @@ from PIL import Image
 import os
 import time
 from tqdm import tqdm
+import argparse
 
-image_folder_path = 'data/dataset'
+parser = argparse.ArgumentParser(description='Process data folder path.')
+parser.add_argument('-d', '--data_folder', type=str, required=True, help='Path to the data folder')
+
+args = parser.parse_args()
+
+data_folder = args.data_folder
+
+image_folder_path = data_folder
 
 
 model = EfficientNet.from_pretrained('efficientnet-b1')
