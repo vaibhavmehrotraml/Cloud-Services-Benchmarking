@@ -52,3 +52,7 @@ avg_time_per_image = total_time / len(predictions)
 
 print(f"Total inference time: {total_time} seconds")
 print(f"Average time per image: {avg_time_per_image} seconds")
+
+with open('inference_time.txt', 'a') as file:
+        file.write(f"Total inference time: {total_time} seconds")
+        file.write(f"Average time per image: {avg_time_per_image} seconds")
