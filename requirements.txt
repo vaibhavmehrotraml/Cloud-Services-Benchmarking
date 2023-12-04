@@ -1,5 +1,5 @@
 torchvision
-pytorch
+torch
 pillow
 tqdm
 efficientnet_pytorch
