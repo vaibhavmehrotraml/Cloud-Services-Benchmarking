@@ -1,5 +1,6 @@
 import os
 import time
+import json
 import torch
 import argparse
 import pandas as pd
@@ -56,6 +57,7 @@ for i in range(iterations):
         prediction_times['f{image_name}_{i}'] = time.time() - time_image
         prediction = predict_image(image_path)
         predictions.append(prediction)
+        break
 
 end_time = time.time()
 total_time = end_time - start_time
@@ -68,4 +70,5 @@ with open(f'inference_time_{iterations}iterations.txt', 'a') as file:
         file.write(f"Total inference time: {total_time} seconds")
         file.write(f"Average time per image: {avg_time_per_image} seconds")
 
-pd.DataFrame(prediction_times).to_csv('inference_predition_times.csv')
+with open('inference_predition_times.json', 'w') as fp:
+    json.dump(prediction_times, fp)
