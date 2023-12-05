@@ -1,11 +1,13 @@
+import os
+import time
 import torch
+import argparse
+import pandas as pd
+
 from efficientnet_pytorch import EfficientNet
 from torchvision import transforms
 from PIL import Image
-import os
-import time
 from tqdm import tqdm
-import argparse
 
 parser = argparse.ArgumentParser(description='Process data folder path.')
 parser.add_argument('-d', '--data_folder', type=str, required=True, help='Path to the data folder')
@@ -65,3 +67,5 @@ print(f"Average time per image: {avg_time_per_image} seconds")
 with open(f'inference_time_{iterations}iterations.txt', 'a') as file:
         file.write(f"Total inference time: {total_time} seconds")
         file.write(f"Average time per image: {avg_time_per_image} seconds")
+
+pd.DataFrame(prediction_times).to_csv('inference_predition_times.csv')
