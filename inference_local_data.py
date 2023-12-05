@@ -16,7 +16,7 @@ parser.add_argument('-i', '--iterations', type=str, required=True, help='Number 
 args = parser.parse_args()
 
 data_folder = args.data_folder
-iterations = args.iterations
+iterations = int(args.iterations)
 image_folder_path = data_folder
 
 
