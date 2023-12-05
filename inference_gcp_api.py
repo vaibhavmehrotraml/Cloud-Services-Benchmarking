@@ -3,6 +3,7 @@ from efficientnet_pytorch import EfficientNet
 from torchvision import transforms
 from PIL import Image
 import os
+import io
 import time
 from tqdm import tqdm
 import argparse
