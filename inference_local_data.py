@@ -54,7 +54,7 @@ for i in range(iterations):
             continue
         image_path = os.path.join(image_folder_path, image_name)
         time_image = time.time()
-        prediction_times['f{image_name}_{i}'] = time.time() - time_image
+        prediction_times[f'{image_name}_{i}'] = time.time() - time_image
         prediction = predict_image(image_path)
         predictions.append(prediction)
         break
