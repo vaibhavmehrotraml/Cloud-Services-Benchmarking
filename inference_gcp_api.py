@@ -13,13 +13,11 @@ client = storage.Client()
 
 # Parser for command line arguments
 parser = argparse.ArgumentParser(description='Process data folder path.')
-parser.add_argument('-b', '--bucket', type=str, required=True, help='GCS bucket and folder path (format: bucket/folder)')
+parser.add_argument('-d', '--data_folder', type=str, required=True, help='GCS bucket and folder path (format: bucket/folder)')
 args = parser.parse_args()
 
 # Extract bucket name and folder path
-args = parser.parse_args()
-
-data_folder = args.data_folder
+bucket_name, folder_path = args.data_folder.split('/', 1)
 bucket = client.get_bucket(bucket_name)
 
 # Initialize EfficientNet model
