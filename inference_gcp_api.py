@@ -8,6 +8,7 @@ import time
 from tqdm import tqdm
 import argparse
 from google.cloud import storage
+import pandas as pd
 
 # Initialize GCS client
 client = storage.Client()
@@ -50,12 +51,18 @@ start_time = time.time()
 
 # Load images from GCS and run inference
 predictions = []
+prediction_times = {}
+
 blobs = bucket.list_blobs(prefix=folder_path)  # List files in the specified folder
-for blob in tqdm(blobs):
-    if not blob.name.endswith('.csv'):
-        image_bytes = blob.download_as_bytes()
-        prediction = predict_image(image_bytes)
-        predictions.append(prediction)
+
+for i in range(iterations):
+    for blob in tqdm(blobs):
+        if not blob.name.endswith('.csv'):
+            time_image = time.time()
+            image_bytes = blob.download_as_bytes()
+            prediction = predict_image(image_bytes)
+            prediction_times['f{blob}_{i}'] = time.time() - time_image
+            predictions.append(prediction)
 
 # End timing
 end_time = time.time()
@@ -66,6 +73,6 @@ print(f"Total inference time: {total_time} seconds")
 print(f"Average time per image: {avg_time_per_image} seconds")
 
 # Write inference time to a file
-with open('inference_time.txt', 'a') as file:
-    file.write(f"Total inference time: {total_time} seconds\n")
+with open(f'inference_time_api_{iterations}iterations.txt', 'a') as file:
+    file.write(f"Total inference time: {total_time} seconds")
     file.write(f"Average time per image: {avg_time_per_image} seconds\n")
