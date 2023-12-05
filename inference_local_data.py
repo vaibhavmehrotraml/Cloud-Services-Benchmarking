@@ -9,11 +9,12 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Process data folder path.')
 parser.add_argument('-d', '--data_folder', type=str, required=True, help='Path to the data folder')
+parser.add_argument('-i', '--iterations', type=str, required=True, help='Number of iterations over the data')
 
 args = parser.parse_args()
 
 data_folder = args.data_folder
-
+iterations = args.iterations
 image_folder_path = data_folder
 
 
@@ -35,19 +36,24 @@ def predict_image(image_path):
     except Exception as e:
         print(e)
         return 0
+    
     with torch.no_grad():
         outputs = model(image)
     return torch.argmax(outputs, dim=1)
 
-start_time = time.time()
-
 predictions = []
-for image_name in tqdm(os.listdir(image_folder_path)):
-    if image_name.endswith('.csv'):
-        continue
-    image_path = os.path.join(image_folder_path, image_name)
-    prediction = predict_image(image_path)
-    predictions.append(prediction)
+prediction_times = {}
+
+start_time = time.time()
+for i in range(iterations):
+    for image_name in tqdm(os.listdir(image_folder_path)):
+        if image_name.endswith('.csv'):
+            continue
+        image_path = os.path.join(image_folder_path, image_name)
+        time_image = time.time()
+        prediction_times['f{image_name}_{i}'] = time.time() - time_image
+        prediction = predict_image(image_path)
+        predictions.append(prediction)
 
 end_time = time.time()
 total_time = end_time - start_time
@@ -56,6 +62,6 @@ avg_time_per_image = total_time / len(predictions)
 print(f"Total inference time: {total_time} seconds")
 print(f"Average time per image: {avg_time_per_image} seconds")
 
-with open('inference_time.txt', 'a') as file:
+with open(f'inference_time_{iterations}iterations.txt', 'a') as file:
         file.write(f"Total inference time: {total_time} seconds")
         file.write(f"Average time per image: {avg_time_per_image} seconds")
