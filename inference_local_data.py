@@ -57,7 +57,6 @@ for i in range(iterations):
         prediction = predict_image(image_path)
         prediction_times[f'{image_name}_{i}'] = time.time() - time_image
         predictions.append(prediction)
-        break
 
 end_time = time.time()
 total_time = end_time - start_time
@@ -70,5 +69,5 @@ with open(f'inference_time_{iterations}iterations.txt', 'a') as file:
         file.write(f"Total inference time: {total_time} seconds")
         file.write(f"Average time per image: {avg_time_per_image} seconds")
 
-with open('inference_predition_times.json', 'w') as fp:
+with open(f'inference_times_local_{iterations}iterations.json', 'w') as fp:
     json.dump(prediction_times, fp)

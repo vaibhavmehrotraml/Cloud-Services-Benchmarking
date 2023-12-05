@@ -3,6 +3,7 @@ from efficientnet_pytorch import EfficientNet
 from torchvision import transforms
 from PIL import Image
 import os
+import json
 import io
 import time
 from tqdm import tqdm
@@ -64,7 +65,7 @@ for i in range(iterations):
             time_image = time.time()
             image_bytes = blob.download_as_bytes()
             prediction = predict_image(image_bytes)
-            prediction_times['f{blob}_{i}'] = time.time() - time_image
+            prediction_times[f'{blob}_{i}'] = time.time() - time_image
             predictions.append(prediction)
 
 # End timing
@@ -79,3 +80,6 @@ print(f"Average time per image: {avg_time_per_image} seconds")
 with open(f'inference_time_api_{iterations}iterations.txt', 'a') as file:
     file.write(f"Total inference time: {total_time} seconds")
     file.write(f"Average time per image: {avg_time_per_image} seconds\n")
+
+with open(f'inference_times_api_{iterations}iterations.json', 'w') as fp:
+    json.dump(prediction_times, fp)
