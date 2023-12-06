@@ -11,6 +11,10 @@ import argparse
 from google.cloud import storage
 import pandas as pd
 
+# Allow Image.Io to load truncated files as well.
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
 # Initialize GCS client
 client = storage.Client()
 
