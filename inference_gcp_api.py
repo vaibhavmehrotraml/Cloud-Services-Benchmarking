@@ -61,9 +61,9 @@ start_time = time.time()
 predictions = []
 prediction_times = {}
 
-blobs = bucket.list_blobs(prefix=folder_path)  # List files in the specified folder
 
 for i in range(iterations):
+    blobs = bucket.list_blobs(prefix=folder_path)  # List files in the specified folder
     for blob in tqdm(blobs):
         if not blob.name.endswith('.csv'):
             time_image = time.time()
