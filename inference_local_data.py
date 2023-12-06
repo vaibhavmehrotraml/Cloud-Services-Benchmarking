@@ -10,6 +10,10 @@ from torchvision import transforms
 from PIL import Image
 from tqdm import tqdm
 
+# Allow Image.Io to load truncated files as well.
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
 parser = argparse.ArgumentParser(description='Process data folder path.')
 parser.add_argument('-d', '--data_folder', type=str, required=True, help='Path to the data folder')
 parser.add_argument('-i', '--iterations', type=str, required=True, help='Number of iterations over the data')
