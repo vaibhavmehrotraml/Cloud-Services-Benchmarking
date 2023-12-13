@@ -61,9 +61,11 @@ start_time = time.time()
 predictions = []
 prediction_times = {}
 
+iteration_times = []
 
 for i in range(iterations):
     blobs = bucket.list_blobs(prefix=folder_path)  # List files in the specified folder
+    iter_time = time.time()
     for blob in tqdm(blobs):
         if not blob.name.endswith('.csv'):
             time_image = time.time()
@@ -71,7 +73,9 @@ for i in range(iterations):
             prediction = predict_image(image_bytes)
             prediction_times[f'{blob}_{i}'] = time.time() - time_image
             predictions.append(prediction)
-
+    iteration_time = time.time() - iter_time
+    iteration_times.append(iteration_time)
+    
 # End timing
 end_time = time.time()
 total_time = end_time - start_time
@@ -84,6 +88,8 @@ print(f"Average time per image: {avg_time_per_image} seconds")
 with open(f'inference_time_api_{iterations}iterations.txt', 'a') as file:
     file.write(f"Total inference time: {total_time} seconds")
     file.write(f"Average time per image: {avg_time_per_image} seconds\n")
-
+    for idx, i_time in enumerate(iteration_times):
+        file.write(f"Iteration {idx+1}: {i_time}")
+        
 with open(f'inference_times_api_{iterations}iterations.json', 'w') as fp:
     json.dump(prediction_times, fp)
